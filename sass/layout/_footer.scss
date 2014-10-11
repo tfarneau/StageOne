@@ -1,0 +1,13 @@
+// ----------------------
+// == Layout/Footer
+// ----------------------
+
+.l-footer {
+	@include position(absolute, 0 0px 6px 0px);
+	z-index: 9;
+	text-align:right;
+	font-size:pxtoem(14);
+	li{
+		margin-right:10px;
+	}
+}
