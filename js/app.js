@@ -4,6 +4,8 @@ jQuery(function($) {
 	/*							GOOGLE MAP						*/
 	/*\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
 
+	var _stages = [];
+
 	var stages = [
 		['Paris', 48.8566140, 2.3522219, 4],
 		['Lyon', 45.7640430, 4.8356590, 5],
@@ -55,10 +57,14 @@ jQuery(function($) {
 	/*							ACTIONS							*/
 	/*\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
 
+	function showStage(data){
+		console.log(data);
+	}
+
 	// First-step click
 	$('.first-step button, .first-step .close').click(function(){
 		$('.first-step').fadeOut();
-		$('#search-stage').focus();
+		// $('#search-stage').focus();
 		toggleContainer($('.l-container.left'));
 	});
 
@@ -74,11 +80,10 @@ jQuery(function($) {
 	});
 
 	// Search dropdown
-	$('.search .toggle-dropdown').click(function(e){
-		e.preventDefault();
+	$('#search-stage').click(function(e){
 		e.stopPropagation();
-		$('.search .dropdown').toggleClass('open');
-		$('#search-stage').focus();
+		e.preventDefault();
+		$('.search .dropdown').addClass('open');
 	});
 
 	// Stop propagation body
@@ -87,17 +92,24 @@ jQuery(function($) {
 	});
 
 	// Body click
-	$('body').click(function(){
+	$('body').click(function(e){
 		if($('.search .dropdown').hasClass('open')){
 			$('.search .dropdown').removeClass('open');
 		}
 	});
 
 	// Click on stage
-	$('.show-stage, .close-detail').click(function(e){
+	$('.show-stage, .close-detail').on('click', function(e){
 		e.preventDefault();
 		$('.l-container .detail').toggleClass('open');
 	});
+
+	$( ".stages" ).delegate( ".show-stage", "click", function(e) {
+		e.preventDefault();
+		showStage($(this).attr('data-id'));
+		$('.l-container .detail').toggleClass('open');
+	});
+
 
 	$('.close-news').click(function(e){
 		e.preventDefault();
@@ -109,6 +121,7 @@ jQuery(function($) {
 	/*\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
 
 	// Toggle visibility for left & right container
+
 	function toggleContainer(container){
 		$('.l-container.open').not(container).removeClass('open');
 		container.toggleClass('open');
@@ -129,7 +142,7 @@ jQuery(function($) {
 
 			var s = data[i];
 
-			var stage = '<li><a href="" class="show-stage">';
+			var stage = '<li><a href="#" class="show-stage" data-id="'+data[i].ID+'">';
 			stage    += "<h3>"+s.post_title+"</h3>";
 			stage    += '<div class="description">';
 			stage+="<p>"+s.domaine[0].name;
@@ -189,6 +202,8 @@ jQuery(function($) {
 			success:function(data, textStatus, jqXHR) 
 			{	
 			    var data = JSON.parse(data);
+
+			    _stages.push(data);
 
 			    if(data.status=="success"){
 			    	showMessage('Votre stage a été enregistré et sera examiné sous peu');
