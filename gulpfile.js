@@ -77,7 +77,7 @@ gulp.task('img', function(){
     Livereload
 -------------------------------------------------------------------*/
 // Watch Files For Changes
-gulp.task('watch', function() {
+gulp.task('default', function() {
 
     console.log("watching ...");
 

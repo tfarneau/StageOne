@@ -16,6 +16,7 @@
         <ul class="stages">
             
         </ul>
+        <div class="loadmore" style="position: absolute; bottom: 35px; left:5px;">LOAD MORE</div>
         <span class="close fa fa-arrow-right"></span>
     </div>
     <div class="content detail">

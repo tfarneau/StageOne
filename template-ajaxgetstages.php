@@ -21,8 +21,47 @@
 
 	if(isset($_GET['limit'])){ $limit=clean_input($_GET['limit']); }
 	if(isset($_GET['offset'])){ $offset=clean_input($_GET['offset']); }
-	if(isset($_GET['domaine'])){ $domaine=clean_input($_GET['domaine']); }
-	if(isset($_GET['skill'])){ $skill=clean_input($_GET['skill']); }
+
+	// Search by taxonomy
+	$tax=array();
+
+	if(isset($_GET['domaine'])){ 
+		$domaine=clean_input($_GET['domaine']); 
+
+		// die($domaine);
+
+		$tax2 = array(
+			'taxonomy' => 'domaine',
+			'field' => 'slug',
+			'terms' => $domaine
+		);
+
+		array_push($tax,$tax2);
+
+		// $domaines = explode(',', $domaines);
+		// foreach($domaines as $k => $v){
+		// 	$tax2 = array(
+		// 		'taxonomy' => 'domaine',
+		// 		'field' => 'name',
+		// 		'terms' => $v
+		// 	);
+		// 	array_push($tax,$tax2);
+		// }
+	}
+
+	// if(isset($_GET['skill'])){ 
+	// 	$skills=clean_input($_GET['skill']); 
+
+	// 	$skills = explode(',', $skills);
+	// 	foreach($skills as $k => $v){
+	// 		$tax2 = array(
+	// 			'taxonomy' => 'skill',
+	// 			'field' => 'name',
+	// 			'terms' => $v
+	// 		);
+	// 		array_push($tax,$tax2);
+	// 	}
+	// }
 
 	$args = array(
 		'posts_per_page'   => $limit,
@@ -34,30 +73,6 @@
 		'post_status'      => 'publish',
 		'suppress_filters' => true
 	);
-
-	$tax=array();
-
-	if($domaine!=null){
-
-		$tax2=array(
-			'taxonomy' => 'domaine',
-			'field' => 'slug',
-			'terms' => $domaine
-		);
-
-		array_push($tax,$tax2);
-	}
-
-	if($skill!=null){
-
-		$tax2 = array(
-			'taxonomy' => 'skill',
-			'field' => 'slug',
-			'terms' => $skill
-		);
-
-		array_push($tax,$tax2);
-	}
 
 	if(count($tax)>0)
 		$args['tax_query']=$tax;
@@ -73,7 +88,7 @@
 		$data[$k]->skills=wp_get_post_terms($v->ID,'skill');
 	}
 
-	// global $wpdb;
+ // global $wpdb;
  //    echo "<pre>";
  //    print_r( "Nombre de requetes : ".count($wpdb->queries)." / Nombre de stages recup : ".count($data) );
  //    echo "</pre>";
